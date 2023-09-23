@@ -17,7 +17,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Entity(name = "user")
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(name = "uc_user_username", columnNames = {"username"})
