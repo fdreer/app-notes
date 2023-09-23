@@ -1,11 +1,6 @@
 package com.franco.appnotes;
 
 import com.franco.appnotes.dto.NoteDtoRequest;
-import com.franco.appnotes.dto.UserDto;
-import com.franco.appnotes.dto.UserDtoResponse;
-import com.franco.appnotes.entity.Note;
-import com.franco.appnotes.entity.Role;
-import com.franco.appnotes.entity.User;
 import com.franco.appnotes.repository.NoteRepository;
 import com.franco.appnotes.repository.UserRepository;
 import com.franco.appnotes.security.AuthenticationRequest;

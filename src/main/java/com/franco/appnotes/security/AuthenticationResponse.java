@@ -1,8 +1,6 @@
 package com.franco.appnotes.security;
 
-
 import lombok.Builder;
-import lombok.ToString;
 
 @Builder
 public record AuthenticationResponse(
