@@ -22,7 +22,7 @@ jobs:
       - name: Build docker image
         run: docker build -t app-notes/springboot .
       - name: Publish image to docker hub
-        run: docker push app-notes/springboot
+        run: docker push app-notes/springboot:latest
 
   deploy:
     needs: build
