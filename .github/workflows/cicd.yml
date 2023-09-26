@@ -18,7 +18,8 @@ jobs:
       - name: Build project
         run: mvn clean install -DskipTests
       - name: Login to docker hub
-        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}} docker.io
+#        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}} docker.io
+        run: docker login -u fdreer -p 8B72g3k5@
       - name: Build docker image
         run: docker build -t app-notes/springboot .
       - name: Publish image to docker hub
