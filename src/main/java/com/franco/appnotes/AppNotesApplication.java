@@ -31,7 +31,7 @@ public class AppNotesApplication {
 	)
 	{
 		return args -> {
-			initDB(userRepository, noteService, authService);
+//			initDB(userRepository, noteService, authService);
 //			noteRepository.deleteAll();
 //			userRepository.deleteAll();
 		};
