@@ -22,14 +22,14 @@ jobs:
       - name: Build docker image
         run: docker build -t app-notes/springboot .
       - name: Publish image to docker hub
-        run: docker push app-notes/springboot:latest
+        run: docker push app-notes/springboot
 
   deploy:
     needs: build
     runs-on: [app-notes-runner]
     steps:
       - name: Pull image from docker hub
-        run: docker pull in app-notes/springboot:latest
+        run: docker pull in app-notes/springboot
       - name: Delete old container
         run: docker rm -f appnotes-springboot-container
       - name: RUN docker container
