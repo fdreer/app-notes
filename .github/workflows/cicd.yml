@@ -31,7 +31,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: [app-notes-runner]
+    runs-on: self-hosted
     steps:
       - name: Pull image from docker hub
         run: docker pull fdreer/app-notes
