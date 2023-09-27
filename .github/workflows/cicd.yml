@@ -34,7 +34,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Pull image from docker hub
-        run: docker pull fdreer/app-notes
+        run: docker pull fdreer/app-notes:latest
       - name: Delete old container
         run: docker rm -f appnotes-container
       - name: Run docker container
