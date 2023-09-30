@@ -16,7 +16,7 @@ public class DemoController {
     public ResponseEntity<Map<String, String>> helloWorld()
     {
         return new ResponseEntity<>(
-                Map.of("Hello", "World!!"),
+                Map.of("Hello", "World!"),
                 HttpStatus.OK
         );
     }
