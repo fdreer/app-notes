@@ -1,19 +1,17 @@
-package com.franco.appnotes.dto;
+package com.franco.appnotes.users.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.UUID;
 
-/**
- * DTO for {@link com.franco.appnotes.entity.User}
- */
 @AllArgsConstructor
 @Getter
 @ToString
-public class UserDtoResponse implements Serializable {
-    private final Long id;
+public class UserResponseDto implements Serializable {
+    private final UUID id;
     private final String username;
     private final String role;
 }

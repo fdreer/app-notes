@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://ep-plain-star-47974789.us-east-2.aws.neon.tech:5432/notesdb?sslmode=require
-    username: fl0user
-    password: Ju9ea4sIrMSR
+    url: ${DB_URI}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: create
@@ -18,4 +18,4 @@ logging:
       hibernate:
         type: trace
 server:
-  port: 8080
+  port: ${PORT}

@@ -1,10 +1,11 @@
-package com.franco.appnotes.security;
+package com.franco.appnotes.auth;
 
-import com.franco.appnotes.dto.UserDtoResponse;
-import com.franco.appnotes.entity.Role;
-import com.franco.appnotes.entity.User;
+import com.franco.appnotes.security.RegisterRequest;
 import com.franco.appnotes.security.jwt.JwtService;
-import com.franco.appnotes.services.UserService;
+import com.franco.appnotes.users.IUserService;
+import com.franco.appnotes.users.dto.UserResponseDto;
+import com.franco.appnotes.users.entities.Role;
+import com.franco.appnotes.users.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,32 +16,34 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
-    private final UserService userService;
+public class AuthService implements IAuthService{
+    private final IUserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
     private final UserDetailsService userDetailsService;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    @Override
+    public AuthResponse register(RegisterRequest request) {
         var user = User.builder()
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
                 .role(Role.USER)
                 .build();
 
-        UserDtoResponse userCreated = userService.save(user);
+        UserResponseDto userCreated = userService.save(user);
         var jwt = jwtService.generateToken(user);
 
-        return AuthenticationResponse.builder()
-                .token(jwt)
+        return AuthResponse.builder()
+                .jwt(jwt)
                 .id(userCreated.getId())
                 .username(userCreated.getUsername())
 //                .role(Role.valueOf(userCreated.getRole()))
                 .build();
     }
 
-    public AuthenticationResponse login(AuthenticationRequest request) {
+    @Override
+    public AuthResponse login(AuthRequest request) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.username(),
@@ -54,12 +57,12 @@ public class AuthenticationService {
 
         var jwt = jwtService.generateToken(user);
 
-        UserDtoResponse userDTO = userService.findByUsername(request.username());
+        UserResponseDto userDTO = userService.findByUsername(request.username());
 
-        return AuthenticationResponse.builder()
+        return AuthResponse.builder()
                 .username(userDTO.getUsername())
                 .id(userDTO.getId())
-                .token(jwt)
+                .jwt(jwt)
 //                .role(Role.valueOf(userDTO.getRole()))
                 .build();
     }

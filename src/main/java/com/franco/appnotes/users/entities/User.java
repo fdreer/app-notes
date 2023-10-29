@@ -1,15 +1,16 @@
-package com.franco.appnotes.entity;
+package com.franco.appnotes.users.entities;
 
+import com.franco.appnotes.notes.entities.Note;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Builder
 @AllArgsConstructor
@@ -18,15 +19,24 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity(name = "user")
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_user_username", columnNames = {"username"})
-})
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(nullable = false, length = 50, unique = true)
+    @NotNull
+    @NotEmpty
+    @Size(min = 3, max = 50)
     private String username;
+
+    @Column(nullable = false, length = 100)
+    @NotNull
+    @NotEmpty
+    @Size(min = 5, max = 100)
     private String password;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

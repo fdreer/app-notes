@@ -1,20 +1,22 @@
 package com.franco.appnotes;
 
-import com.franco.appnotes.dto.NoteDtoRequest;
-import com.franco.appnotes.repository.NoteRepository;
-import com.franco.appnotes.repository.UserRepository;
-import com.franco.appnotes.security.AuthenticationRequest;
-import com.franco.appnotes.security.AuthenticationResponse;
-import com.franco.appnotes.security.AuthenticationService;
+import com.franco.appnotes.auth.AuthRequest;
+import com.franco.appnotes.auth.AuthResponse;
+import com.franco.appnotes.auth.IAuthService;
+import com.franco.appnotes.notes.INoteService;
+import com.franco.appnotes.notes.NoteRepository;
+import com.franco.appnotes.notes.dto.NoteCreateDto;
 import com.franco.appnotes.security.RegisterRequest;
-import com.franco.appnotes.services.NoteService;
-import com.franco.appnotes.services.UserService;
+import com.franco.appnotes.users.IUserService;
+import com.franco.appnotes.users.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class AppNotesApplication {
 
 	public static void main(String[] args) {
@@ -23,11 +25,11 @@ public class AppNotesApplication {
 
 	@Bean
 	public CommandLineRunner commandLineRunner(
-			UserService userService,
-			NoteService noteService,
+			IUserService userService,
+			INoteService noteService,
 			UserRepository userRepository,
 			NoteRepository noteRepository,
-			AuthenticationService authService
+			IAuthService authService
 	)
 	{
 		return args -> {
@@ -38,8 +40,8 @@ public class AppNotesApplication {
 	}
 
 	private static void initDB(UserRepository userRepository,
-							   NoteService noteService,
-							   AuthenticationService authService)
+							   INoteService noteService,
+							   IAuthService authService)
 	{
 //		User me = User.builder()
 //				.username("franco00")
@@ -50,36 +52,34 @@ public class AppNotesApplication {
 //		User user1 = userRepository.save(me);
 
 		RegisterRequest franco00 = RegisterRequest.builder()
-				.username("franco00")
-				.password("12345")
+				.username("franco")
+				.password("8B72g3k5@")
 				.build();
 
-		AuthenticationResponse register = authService.register(franco00);
+		AuthResponse register = authService.register(franco00);
 
-		NoteDtoRequest note1 = NoteDtoRequest.builder()
+		NoteCreateDto note1 = NoteCreateDto.builder()
 				.title("Primera nota")
 				.content("Contenido de la primera nota")
-				.completed(false)
 				.important(true)
 				.userId(register.id())
 				.build();
 
 		noteService.createNote(note1);
 
-		NoteDtoRequest note2 = NoteDtoRequest.builder()
+		NoteCreateDto note2 = NoteCreateDto.builder()
 				.title("Segunda nota")
 				.content("Contenido de la segunda nota")
-				.completed(false)
 				.important(true)
 				.userId(register.id())
 				.build();
 
-		AuthenticationRequest auth = AuthenticationRequest.builder()
+		AuthRequest auth = AuthRequest.builder()
 				.username("franco00")
 				.password("12345")
 				.build();
 
-		AuthenticationResponse login = authService.login(auth);
+		AuthResponse login = authService.login(auth);
 		System.out.println(login);
 	}
 }

@@ -1,11 +1,13 @@
-package com.franco.appnotes.security;
+package com.franco.appnotes.auth;
 
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Builder
-public record AuthenticationResponse(
-        String token,
-        Long id,
+public record AuthResponse(
+        String jwt,
+        UUID id,
         String username
 //        Role role
 ) {
@@ -13,7 +15,7 @@ public record AuthenticationResponse(
     @Override
     public String toString() {
         return "AuthenticationResponse{" +
-                "token='" + token + '\'' +
+                "token='" + jwt + '\'' +
                 ", id=" + id +
                 ", username='" + username + '\'' +
                 '}';

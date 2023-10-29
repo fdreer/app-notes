@@ -1,17 +1,25 @@
-package com.franco.appnotes.entity;
+package com.franco.appnotes.notes.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.franco.appnotes.dto.NoteDtoRequest;
+import com.franco.appnotes.notes.dto.NoteCreateDto;
+import com.franco.appnotes.notes.dto.NoteUpdateDto;
+import com.franco.appnotes.users.entities.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
@@ -22,17 +30,26 @@ import java.util.Objects;
 @Entity(name = "note")
 @Table(name = "notes")
 @EntityListeners(AuditingEntityListener.class)
+@DynamicUpdate
 public class Note implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-//    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(nullable = false, length = 100)
+    @NotNull
+    @NotEmpty
+    @Size(min = 3, max = 100)
     private String title;
-//    @Column(nullable = false)
+
+    @Column(nullable = false, length = 500)
+    @NotNull
+    @NotEmpty
+    @Size(min = 3, max = 500)
     private String content;
-//    @Column(nullable = false)
-    private boolean completed;
-//    @Column(nullable = false)
+
+    @Column(nullable = false)
+    @NotNull
     private boolean important;
 
     @ManyToOne
@@ -56,33 +73,27 @@ public class Note implements Serializable {
      * Return a note with the user assigned to it, ready to be saved in the
      * database.
      */
-    public static Note assignUserToNote(NoteDtoRequest note, User user)
+    public static Note assignUserToNote(NoteCreateDto note, User user)
     {
         return Note.builder()
                 .title(note.title())
                 .content(note.content())
-                .completed(note.completed())
                 .important(note.important())
-                .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
                 .user(user)
                 .build();
     }
 
     /*
     * Only return the note with fields title, content and lastModifiedDate
-    * updated. To update important and completed fields, use another method.
+    * updated.
     * */
-    public static Note getNewNoteUpdated(NoteDtoRequest newNote, Note oldNote)
+    public static Note getNewNoteUpdated(NoteUpdateDto newNote, Note oldNote)
     {
         return Note.builder()
                 .id(oldNote.getId())
                 .title(newNote.title() == null ? oldNote.getTitle() : newNote.title())
                 .content(newNote.content() == null ? oldNote.getContent() : newNote.content())
                 .important(oldNote.isImportant())
-                .completed(oldNote.isCompleted())
-                .createdDate(oldNote.getCreatedDate())
-                .lastModifiedDate(LocalDateTime.now())
                 .user(oldNote.getUser())
                 .build();
     }

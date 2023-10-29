@@ -1,11 +1,12 @@
 package com.franco.appnotes.security.config;
 
-import com.franco.appnotes.repository.UserRepository;
+import com.franco.appnotes.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.User;
@@ -23,12 +24,12 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return email -> userRepository.findByUsername(email)
+        return username -> userRepository.findByUsername(username)
                 .map(user -> User.withUsername(user.getUsername())
                         .password(user.getPassword())
                         .roles(user.getRole().name())
                         .build())
-                .orElseThrow(() -> new RuntimeException("Datos de inicio de sesión incorrectos"));
+                .orElseThrow(() -> new BadCredentialsException("Datos de inicio de sesión incorrectos"));
     }
 
     @Bean

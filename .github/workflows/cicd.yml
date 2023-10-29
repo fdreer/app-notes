@@ -29,13 +29,14 @@ jobs:
           push: true
           tags: fdreer/app-notes:latest
 
-  deploy:
-    needs: build
-    runs-on: self-hosted
-    steps:
-      - name: Pull image from docker hub
-        run: docker pull fdreer/app-notes:latest
-      - name: Delete old container
-        run: docker rm -f appnotes-container
-      - name: Run docker container
-        run: docker run -d -p 8080:8080 --name appnotes-container fdreer/app-notes
+# Se utilizaria cuando tenga un self-runner
+#  deploy:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Pull image from docker hub
+#        run: docker pull fdreer/app-notes:latest
+#      - name: Delete old container
+#        run: docker rm -f appnotes-container
+#      - name: Run docker container
+#        run: docker run -d -p 8080:8080 --name appnotes-container fdreer/app-notes
